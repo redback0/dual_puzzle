@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/bin/python3 -u
 
 import threading
 from enum import Enum
@@ -162,12 +162,11 @@ def check_duplicate_pieces(edges: EdgeList):
 
 def check_boring_solution(a: List[RPiece], b: List[RPiece]):
     total_zeros = 0
-    for y in range(puzzle_height):
-        for x in range(puzzle_width):
-            if a[(y * puzzle_width) + x] is b[(y * puzzle_width) + x]:
-                total_zeros += 1
-            if total_zeros > 2:
-                return True
+    for i in range(puzzle_width * puzzle_height):
+        if a[i].piece is b[i].piece:
+            total_zeros += 1
+        if total_zeros > 2:
+            return True
     return False
 
 
@@ -423,10 +422,10 @@ def main():
         solutions = []
         solve_puzzle(pieces, edges)
         if len(solutions) > 1:
-            print(f"Double solution found on puzzle {puzzle_no}!\n")
             if len(solutions) == 2 and check_boring_solution(solutions[0], solutions[1]):
-                print(f"Boring solution, skipping")
+                #print(f"Boring solution, skipping")
                 continue
+            print(f"Double solution found on puzzle {puzzle_no}!\n")
             print(f"Solution 1")
             print_puzzle(solutions[0])
             for index in range(1, len(solutions)):
